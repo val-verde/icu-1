@@ -10,13 +10,16 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <atomic>
 #include "unicode/appendable.h"
 #include "unicode/fieldpos.h"
 #include "unicode/formattedvalue.h"
 #include "unicode/fpositer.h"
 #include "unicode/numberformatter.h"
 #include "unicode/unumberrangeformatter.h"
+
+#ifndef __wasi__
+#include <atomic>
+#endif
 
 /**
  * \file
@@ -77,7 +80,9 @@ struct UFormattedNumberRangeImpl;
 } // namespace icu::number
 U_NAMESPACE_END
 
+#ifndef __wasi__
 template struct U_I18N_API std::atomic< U_NAMESPACE_QUALIFIER number::impl::NumberRangeFormatterImpl*>;
+#endif
 
 U_NAMESPACE_BEGIN
 namespace number {  // icu::number
@@ -546,7 +551,11 @@ class U_I18N_API LocalizedNumberRangeFormatter
     ~LocalizedNumberRangeFormatter();
 
   private:
+#ifndef __wasi__
     std::atomic<impl::NumberRangeFormatterImpl*> fAtomicFormatter = {};
+#else
+    impl::NumberRangeFormatterImpl* fAtomicFormatter = nullptr;
+#endif
 
     const impl::NumberRangeFormatterImpl* getFormatter(UErrorCode& stauts) const;
 
