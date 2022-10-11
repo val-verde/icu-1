@@ -1,0 +1,2 @@
+include $(top_srcdir)/config/mh-linux
+LD_RPATH= -Wl,-rpath,'$$'ORIGIN
